@@ -94,7 +94,7 @@ async def play_rps(ctx: commands.context.Context):
         winner = rps.get_winner("I", bot_move, "You", view_1.user_move)
         winner_str = "It's a draw!" if winner is None else f"{winner} win!"
         bot_msg = (f"Wait, you want to play against me? " \
-                "Okay. 😊\n\n" \
+                "Okay.\n\n" \
                 f"I choose {bot_move}.\n" \
                 f"You chose {view_1.user_move}.\n\n" \
                 f"{rps.comparison_string(bot_move, view_1.user_move)}\n\n" \
