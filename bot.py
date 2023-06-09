@@ -118,4 +118,10 @@ async def play_rps(ctx: commands.context.Context):
                 f"{winner_str}")
         await view_2.message.reply(final_msg)
 
+@bot.command(name="rps-diagram",
+             help="Show a diagram of what beats what.")
+async def send_diagram(ctx: commands.context.Context):
+    diagram = discord.File("media/ultimate-rps.webp")
+    await ctx.reply(file=diagram)
+
 bot.run(keys.TOKEN)
