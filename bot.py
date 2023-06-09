@@ -103,7 +103,7 @@ async def play_rps(ctx: commands.context.Context):
     elif opponent == challenger:
         await view_1.message.reply("Umm...\n\nYou can't play against yourself. Silly goose.")
     else:
-        followup_msg = (f"{opponent_name}, " \
+        followup_msg = (f"{opponent.mention}, " \
                 f"you have been challenged to a duel by {challenger_name}. " \
                 "Please choose your move.")
         view_2 = OpponentView(user=opponent)
