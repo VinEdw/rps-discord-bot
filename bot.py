@@ -1,13 +1,22 @@
+import logging
 import discord
 from discord.ext import commands
 import rps
 import keys
 
+logger = logging.getLogger("discord")
+logger.setLevel(logging.INFO)
+
+handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
+dt_fmt = '%Y-%m-%d %H:%M:%S'
+formatter = logging.Formatter('[{asctime}] [{levelname:<8}] {name}: {message}', dt_fmt, style='{')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
 intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(intents=intents, command_prefix="!")
-
 
 class OpponentView(discord.ui.View):
     def __init__(self, *, user: discord.Member|discord.User, timeout: float = 180):
@@ -28,6 +37,7 @@ class OpponentView(discord.ui.View):
         self.user_move = self.move_select.values[0]
         await interaction.response.defer()
         await self.try_finish()
+        logger.info(f"{self.user} selected {self.user_move}")
 
     def check_finished(self):
         return hasattr(self, "user_move")
@@ -45,12 +55,14 @@ class OpponentView(discord.ui.View):
     async def on_timeout(self):
         await self.disable()
         await self.message.reply("RPS game timed out")
+        logger.info(f"{self.user} did not respond in time, so the game timed out")
 
     async def interaction_check(self, interaction: discord.interactions.Interaction):
         if interaction.user != self.user:
             await interaction.response.send_message(
                     f"Hey. You can't make a move for another user! Feel free to start your own game though.",
                     ephemeral=True)
+            logger.info(f"{interaction.user} tried to interact with a view meant for {self.user}")
             return False
         return True
 
@@ -70,6 +82,7 @@ class ChallengerView(OpponentView):
         self.opponent = self.opponent_select.values[0]
         await interaction.response.defer()
         await self.try_finish()
+        logger.info(f"{self.user} challenged {self.opponent}")
 
     def check_finished(self):
         return super().check_finished() and hasattr(self, "opponent")
@@ -79,6 +92,7 @@ class ChallengerView(OpponentView):
              help="Play extended rock paper scissors.")
 async def play_rps(ctx: commands.context.Context):
     challenger = ctx.author
+    logger.info(f"{challenger} started a game")
     challenger_name = challenger.display_name
     initial_msg = (f"Hi {challenger_name}! " \
             "So, you want to play some rock paper scissors? " \
@@ -117,6 +131,7 @@ async def play_rps(ctx: commands.context.Context):
                 f"{rps.comparison_string(view_1.user_move, view_2.user_move)}\n\n" \
                 f"{winner_str}")
         await view_2.message.reply(final_msg)
+    logger.info(f"Game between {challenger} and {opponent} finished")
 
 @bot.command(name="rps-diagram",
              help="Show a diagram of what beats what.")
@@ -124,4 +139,4 @@ async def send_diagram(ctx: commands.context.Context):
     diagram = discord.File("media/ultimate-rps.webp")
     await ctx.reply(file=diagram)
 
-bot.run(keys.TOKEN)
+bot.run(keys.TOKEN, log_handler=None)
