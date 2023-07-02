@@ -1,0 +1,12 @@
+[Unit]
+Description=Rock Paper Scissors Discord Bot
+After=network.target
+
+[Service]
+WorkingDirectory=/home/miste/coding/rps-discord-bot
+User=miste
+ExecStart=/bin/bash -c "source .venv/bin/activate && python bot.py"
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
