@@ -120,7 +120,7 @@ async def play_rps(ctx: commands.context.Context):
         followup_msg = (f"{opponent.mention}, " \
                 f"you have been challenged to a duel by {challenger_name}. " \
                 "Please choose your move.")
-        view_2 = OpponentView(user=opponent)
+        view_2 = OpponentView(user=opponent, timeout=600)
         view_2.message = await view_1.message.reply(followup_msg, view=view_2)
         timed_out = await view_2.wait()
         if timed_out: return
