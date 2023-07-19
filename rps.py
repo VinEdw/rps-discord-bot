@@ -1,3 +1,4 @@
+from __future__ import annotations
 import random
 # Inspired by https://www.reddit.com/r/coolguides/comments/cauhw3/ultimate_rock_paper_scissors/
 options = ["rock",
