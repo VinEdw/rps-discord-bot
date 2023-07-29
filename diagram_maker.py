@@ -47,7 +47,7 @@ text[data-option="{option}"]:hover ~ path[data-option="{option}"] {{
 }}
 """
 style = ET.SubElement(root, "style")
-style.text = "\n".join([css_template.format(option=option) for option in options])
+style.text = "".join([css_template.format(option=option) for option in options])
 
 # Add a background box
 ET.SubElement(root, "rect", {"x": str(-ax_len),
