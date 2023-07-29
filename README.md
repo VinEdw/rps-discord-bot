@@ -1,6 +1,6 @@
 # rps-discord-bot
 
-![extended rock paper scissors diagrame](media/ultimate-rps.webp)
+![extended rock paper scissors diagrame](media/rps-move-diagram.svg)
 
 This bot allows you to play an extended version of rock paper scissors on your discord server.
 Use the command `!rps` to initialize a game.
