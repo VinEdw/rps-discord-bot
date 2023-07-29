@@ -42,38 +42,15 @@ N = len(option_icons)
 threshold = N // 2
 spacing_ang = 2 * math.pi / N
 positions = []
-# inner_positions = []
 for i in range(N):
     angle = math.pi / 2 + spacing_ang * (threshold - i)
     x = outer_rad * math.cos(angle)
     y = outer_rad * math.sin(angle)
     positions.append((x, y))
-    x_in = inner_rad * math.cos(angle)
-    y_in = inner_rad * math.sin(angle)
-    # inner_positions.append((x, y))
-
-# Draw the connection arrows
-for (x, y), option, color in zip(positions, options, colors):
-    for (x_end, y_end), opponent in zip(positions, options):
-        if rps(option, opponent) == option:
-            angle = math.atan2(y-y_end, x-x_end)
-            x_ah = x_end + (icon_rad + ah_h) * math.cos(angle)
-            y_ah = y_end + (icon_rad + ah_h) * math.sin(angle)
-            ET.SubElement(root, "path", {"d": f"M {x} {y} L {x_ah} {y_ah}",
-                                         "stroke": color,
-                                         "data-option": option,
-                                         })
-            x_con = x_end + icon_rad * math.cos(angle)
-            y_con = y_end + icon_rad * math.sin(angle)
-            ah_edge_1 = f"{ah_h * math.cos(angle) + ah_w/2 * math.sin(angle) + x_con} {ah_h * math.sin(angle) - ah_w/2 * math.cos(angle) + y_con}"
-            ah_edge_2 = f"{ah_h * math.cos(angle) - ah_w/2 * math.sin(angle) + x_con} {ah_h * math.sin(angle) + ah_w/2 * math.cos(angle) + y_con}"
-            ET.SubElement(root, "path", {"d": f"M {x_con} {y_con} L {ah_edge_1} L {ah_edge_2} Z",
-                                         "fill": color,
-                                         "data-option": option,
-                                         })
 
 # Draw the icon for each option
 for (x, y), option, emoji, color in zip(positions, options, option_icons, colors):
+    # Draw the circle
     ET.SubElement(root, "circle", {"r": str(icon_rad),
                                    "cx": str(x),
                                    "cy": str(y),
@@ -81,6 +58,7 @@ for (x, y), option, emoji, color in zip(positions, options, option_icons, colors
                                    "stroke": "black",
                                    "data-option": option,
                                    })
+    # Draw the emoji on top of the circle
     txt = ET.SubElement(root, "text", {"x": str(x),
                                        "y": str(y + shift_down),
                                        "text-anchor": "middle",
@@ -89,6 +67,34 @@ for (x, y), option, emoji, color in zip(positions, options, option_icons, colors
                                        "font-size": str(font_size),
                                        })
     txt.text = emoji
+
+# Draw the connection arrows
+for (x, y), option, color in zip(positions, options, colors):
+    for (x_end, y_end), opponent in zip(positions, options):
+        if rps(option, opponent) == option:
+            angle = math.atan2(y-y_end, x-x_end)
+            # Calculate the position on the surface of the starting circle
+            x_sur = x - icon_rad * math.cos(angle)
+            y_sur = y - icon_rad * math.sin(angle)
+            # Calculate the position where the line transitions into the arrowhead
+            x_ah = x_end + (icon_rad + ah_h) * math.cos(angle)
+            y_ah = y_end + (icon_rad + ah_h) * math.sin(angle)
+            # Draw the line
+            ET.SubElement(root, "path", {"d": f"M {x_sur} {y_sur} L {x_ah} {y_ah}",
+                                         "stroke": color,
+                                         "data-option": option,
+                                         })
+            # Calculate the position where the arrow contacts the surface of the ending circle
+            x_con = x_end + icon_rad * math.cos(angle)
+            y_con = y_end + icon_rad * math.sin(angle)
+            # Calculate the positions of the edges of the arrowhead
+            ah_edge_1 = f"{ah_h * math.cos(angle) + ah_w/2 * math.sin(angle) + x_con} {ah_h * math.sin(angle) - ah_w/2 * math.cos(angle) + y_con}"
+            ah_edge_2 = f"{ah_h * math.cos(angle) - ah_w/2 * math.sin(angle) + x_con} {ah_h * math.sin(angle) + ah_w/2 * math.cos(angle) + y_con}"
+            # Draw the arrowhead
+            ET.SubElement(root, "path", {"d": f"M {x_con} {y_con} L {ah_edge_1} L {ah_edge_2} Z",
+                                         "fill": color,
+                                         "data-option": option,
+                                         })
 
 # Save the svg file
 fname = "media/rps-move-diagram.svg"
