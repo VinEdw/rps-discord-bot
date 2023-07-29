@@ -137,7 +137,8 @@ async def play_rps(ctx: commands.context.Context):
 @bot.command(name="rps-diagram",
              help="Show a diagram of what beats what.")
 async def send_diagram(ctx: commands.context.Context):
-    diagram = discord.File("media/ultimate-rps.webp")
-    await ctx.reply(file=diagram)
+    diagram = discord.File("media/rps-move-diagram.png")
+    txt = "Interactive diagram at https://raw.githubusercontent.com/VinEdw/rps-discord-bot/master/media/rps-move-diagram.svg"
+    await ctx.reply(txt, file=diagram)
 
 bot.run(keys.TOKEN, log_handler=None)
