@@ -37,6 +37,18 @@ root = ET.Element("svg", {"version": "1.1",
                           "xmlns": "http://www.w3.org/2000/svg",
                           })
 
+# Add a style element for some css hover effects
+css_template = """
+circle[data-option="{option}"]:hover ~ path[data-option="{option}"] {{
+    stroke-width: 3;
+}}
+text[data-option="{option}"]:hover ~ path[data-option="{option}"] {{
+    stroke-width: 3;
+}}
+"""
+style = ET.SubElement(root, "style")
+style.text = "\n".join([css_template.format(option=option) for option in options])
+
 # Add a background box
 ET.SubElement(root, "rect", {"x": str(-ax_len),
                              "y": str(-ax_len),
