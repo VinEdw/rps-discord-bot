@@ -3,19 +3,19 @@ import xml.etree.ElementTree as ET
 from rps import rps, options, option_icons
 
 # Set colors for each option
-colors = ["#008000",
+colors = ["#00ff00",
           "#ffff00",
-          "#ffa500",
+          "#f0f0f0",
           "#808000",
           "#800000",
-          "#00ff00",
+          "#3cb371",
           "#a52a2a",
           "#fa8072",
-          "#800080",
+          "#ff00ff",
           "#87ceeb",
           "#0000ff",
           "#ff0000",
-          "#ff00ff",
+          "#800080",
           "#dda0dd",
           "#808080",
           ]
@@ -36,6 +36,14 @@ root = ET.Element("svg", {"version": "1.1",
                           "viewBox": f"-{ax_len} -{ax_len} {2 * ax_len} {2 * ax_len}",
                           "xmlns": "http://www.w3.org/2000/svg",
                           })
+
+# Add a background box
+ET.SubElement(root, "rect", {"x": str(-ax_len),
+                             "y": str(-ax_len),
+                             "width": str(2 * ax_len),
+                             "height": str(2 * ax_len),
+                             "fill": "#0d1117",
+                             })
 
 # Calculate the center position and inner position of each icon
 N = len(option_icons)
