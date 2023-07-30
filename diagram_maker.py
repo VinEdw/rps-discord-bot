@@ -48,7 +48,7 @@ http://emojisymbols.com/
 */
 @font-face {
   font-family: 'EmojiSymbols';
-  src: url(https://raw.githubusercontent.com/VinEdw/rps-discord-bot/master/font/EmojiSymbols-Regular.woff) format("woff");
+  src: url(../font/EmojiSymbols-Regular.woff) format("woff");
   font-weight: normal;
   font-style: normal;
 }
