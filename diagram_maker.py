@@ -20,9 +20,6 @@ colors = ["#00ff00",
           "#808080",
           ]
 
-# Swap out some option_icons
-option_icons[4] = "😃"
-
 # Set various dimensions
 ax_len = 220
 icon_rad = 15
@@ -40,19 +37,7 @@ root = ET.Element("svg", {"version": "1.1",
                           "xmlns": "http://www.w3.org/2000/svg",
                           })
 
-# Add a style element for some css hover effects and a custom font
-css_base = """
-/*
-EmojiSymbols Font (c)blockworks - Kenichi Kaneko
-http://emojisymbols.com/
-*/
-@font-face {
-  font-family: 'EmojiSymbols';
-  src: url(../font/EmojiSymbols-Regular.woff) format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-"""
+# Add a style element for some css hover effects
 css_template = """
 circle[data-option="{option}"]:hover ~ path[data-option="{option}"] {{
     stroke-width: 3;
@@ -62,7 +47,7 @@ text[data-option="{option}"]:hover ~ path[data-option="{option}"] {{
 }}
 """
 style = ET.SubElement(root, "style")
-style.text = css_base + "".join([css_template.format(option=option) for option in options])
+style.text = "".join([css_template.format(option=option) for option in options])
 
 # Add a background box
 ET.SubElement(root, "rect", {"x": str(-ax_len),
@@ -100,8 +85,6 @@ for (x, y), option, emoji, color in zip(positions, options, option_icons, colors
                                        "dominant-baseline": "middle",
                                        "data-option": option,
                                        "font-size": str(font_size),
-                                       "font-family": "EmojiSymbols",
-                                       "filter": "grayscale(1) brightness(0.2)",
                                        })
     txt.text = emoji
 
